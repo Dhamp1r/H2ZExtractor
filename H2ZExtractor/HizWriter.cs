@@ -22,9 +22,11 @@ namespace H2ZExtractor
             decoder.Clear();
             byte[] hiz_data = WriteHiz(hizArchive);
             writer.Write("H2Z".ToCharArray());
-            writer.Write((byte)0);// header
-            writer.Write(0);//checksum
-            writer.Write(hiz_data.Length);//buffer_size
+            writer.Write((byte)0);
+            int checksum = Tools.CalcChecksum(hiz_data, hiz_data.Length);
+            Console.WriteLine("Calculated Checksum: 0x{0}", checksum.ToString("X"));
+            writer.Write(checksum);
+            writer.Write(hiz_data.Length);
             writer.Write(hiz_data);
             writer.Close();
         }
@@ -34,10 +36,10 @@ namespace H2ZExtractor
             MemoryStream stream = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(stream);
             writer.Write(hizArchive.header);
-            writer.Write((byte)0);// header
+            writer.Write((byte)0);
             writer.Write(hizArchive.file_count);
             writer.Write(hizArchive.max_compress_size);
-            
+
             for (int i = 0; i < hizArchive.file_count; i++)
             {
                 HizFile hizFile = hizArchive.hizFiles[i];

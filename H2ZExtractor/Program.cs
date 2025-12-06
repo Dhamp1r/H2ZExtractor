@@ -9,29 +9,26 @@ namespace H2ZExtractor
 {
     class Program
     {
-        private static string version = "1.1";
+        private static string version = "1.3";
         private static string key = "bio4";
         private static HizReader reader;
         private static HizWriter writer;
 
         static void Main(string[] args)
         {
-            //byte[] d = File.ReadAllBytes("file");
-           // Console.WriteLine(Tools.CalcChecksum(d, d.Length));
-            //Console.Read();
-            
-            Console.WriteLine("H2Z Extractor v{0} by rus_lol_\n", version);
+
+            Console.WriteLine("H2Z Extractor v{0} by rus_lol_\nFix by Dhampir", version);
             if (args.Length == 0)
                 Help();
             else
                 ProcedureArgs(args);
             Console.Read();
-            
+
         }
 
         private static void Help()
         {
-            Console.WriteLine("Uncorrect args: Drop h2z files to exe for unpack or folder for pack,\nor use \"H2ZExtractor.exe [files]\"");
+            Console.WriteLine("\nUncorrect args: Drop h2z files to exe for unpack or folder for pack,\nor use \"H2ZExtractor.exe [files]\"");
         }
 
         private static void ProcedureArgs(string[] args)
@@ -72,7 +69,7 @@ namespace H2ZExtractor
             for (int i = 0; i < hiz_files.Length; i++)
             {
                 HizFile hizFile = hiz_files[i];
-                if (hizFile.data.Length == 0) //dir
+                if (hizFile.data.Length == 0)
                 {
                     Directory.CreateDirectory(dir + "/" + hizFile.name);
                 }

@@ -10,14 +10,30 @@ namespace H2ZExtractor
 {
     class Unzip
     {
-        public static byte[] GetData(byte[] h2z_data, bool decompress)
+        public static byte[] GetData(byte[] data, bool decompress)
         {
-            MemoryStream input = new MemoryStream(h2z_data);
-            MemoryStream output = new MemoryStream();
-            DeflateStream deflateStream = new DeflateStream(input, decompress ? CompressionMode.Decompress : CompressionMode.Compress, true);
-            deflateStream.CopyTo(output);
-            return output.ToArray();
+            if (decompress)
+            {
+                using (MemoryStream input = new MemoryStream(data))
+                using (MemoryStream output = new MemoryStream())
+                using (DeflateStream deflateStream = new DeflateStream(input, CompressionMode.Decompress))
+                {
+                    deflateStream.CopyTo(output);
+                    return output.ToArray();
+                }
+            }
+            else
+            {
+                using (MemoryStream input = new MemoryStream(data))
+                using (MemoryStream output = new MemoryStream())
+                {
+                    using (DeflateStream deflateStream = new DeflateStream(output, CompressionMode.Compress, true))
+                    {
+                        input.CopyTo(deflateStream);
+                    }
+                    return output.ToArray();
+                }
+            }
         }
     }
-    
 }
